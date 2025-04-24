@@ -3,8 +3,6 @@
 // This program converts one unsigned 32-bit audio samble to unsigned 8-bit format.
 // The least-significant 24 bits of the sample are lost without any rounding.
 
-// A test case to test your function with
-
 .global _start
 _start:
     ldr r0, =0x12345678

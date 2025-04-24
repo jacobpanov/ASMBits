@@ -2,7 +2,6 @@
 
 // This program returns 123 in r0.
 
-
 .global _start
 _start:
     bl func

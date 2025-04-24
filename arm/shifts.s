@@ -3,8 +3,6 @@
 // This program will accept a 32-bit signed audio sample and 
 // Return a 32-bit signed sample with 1/4 of the amplitude.
 
-// A test case to test your function with
-
 .global _start
 _start:
     ldr r0, =0x40000
