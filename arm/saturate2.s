@@ -9,7 +9,6 @@ _start:
     bl saturate
     b _start          // End of testing code
 
-// Convert signed 32-bit to 8-bit, with saturation
 saturate:
     cmp r0, #0              // Check if r0 is negative
     blt neg                 // If r0 < 0, branch to neg

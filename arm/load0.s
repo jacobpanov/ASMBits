@@ -7,6 +7,7 @@
 _start:
     bl load
     1: b 1b    // Done
+    
 load:
     ldr r1, =Data // Load the address of the word 
     ldr r0, [r1]  // Load the value from the address in r0

@@ -9,7 +9,6 @@ _start:
     bl saturate
     b _start            // End of testing code
 
-// Convert unsigned 32-bit to 16-bit, with saturation
 saturate:
     ldr r1, =0xFFFF     // Load the maximum 16-bit value into r1
     cmp r0, r1          // Compare r0 with 0xFFFF

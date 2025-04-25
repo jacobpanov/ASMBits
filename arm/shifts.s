@@ -9,7 +9,6 @@ _start:
     bl shift
     b _start        // End of testing code
 
-// Return 1/4 amplitude for a S32 sample
 shift:
     asr r0, r0, #2  // Shift right by 2 bits
     bx lr           // Return to the caller

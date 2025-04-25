@@ -9,7 +9,6 @@ _start:
     bl bits
     b _start           // End of testing code
 
-// Return minimum number of bits to represent first parameter
 bits:
     cmp r0, #0          // Compare r0 with 0 to check if it's negative
     mvnlt r0, r0        // If r0 < 0 (negative), take the bitwise NOT of r0 (two's complement)

@@ -12,7 +12,6 @@ _start:
     bl load
     1: b 1b    // Done
 
-// Dereference a pointer
 load:
     ldr r0, [r0, r1, lsl #2]  // Load the value from the address in r0
     bx lr                     // Return to the caller

@@ -8,7 +8,6 @@ _start:
     bl bswap
     b _start        // End of testing code
 
-// Byte swap
 bswap:
     rev r0, r0  // Reverse the byte order
     bx lr       // Return to the caller  

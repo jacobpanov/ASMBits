@@ -8,7 +8,6 @@
 .global _start
 _start:   
     bl  func   // Call your function
-               // Your function should return here.
     1: b 1b    // Infinite loop to stop program after testing
 
 func:

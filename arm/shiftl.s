@@ -11,7 +11,6 @@ _start:
     bl shift
     b _start        // End of testing code
 
-// Convert one S16 to S32 format
 shift:
     lsl r0, r0, #16  // Shift left by 16 bits
     bx lr           // Return to the caller

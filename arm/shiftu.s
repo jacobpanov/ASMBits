@@ -9,7 +9,6 @@ _start:
     bl shift
     b _start        // End of testing code
 
-// Convert one U32 sample to U8 format
 shift:
     lsr r0, r0, #24  // Shift right by 24 bits
     bx lr           // Return to the caller

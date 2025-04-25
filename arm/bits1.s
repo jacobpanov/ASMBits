@@ -9,7 +9,6 @@ _start:
     bl bits
     b _start           // End of testing code
 
-// Return minimum number of bits to represent first parameter
 bits:
     clz r1, r0         // Count leading zeros in r0, store result in r1
     rsb r0, r1, #32    // Subtract the number of leading zeros from 32
