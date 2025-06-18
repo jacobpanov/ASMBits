@@ -14,6 +14,7 @@ _start:
 
 peak:
     // r0 = length, r1 = pointer to array
+    push {r4, r5}      // Save callee-saved registers used
     ldr r2, [r1], #4   // Load first element
     mov r3, r2         // r3 holds minimum
     mov r4, r2         // r4 holds maximum
@@ -32,4 +33,5 @@ loop:
 
 done:
     sub r0, r4, r3     // r0 = max - min
+    pop {r4, r5}       // Restore saved registers
     bx  lr             // Return to caller

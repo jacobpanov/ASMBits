@@ -20,7 +20,8 @@ _start:
 .global array_insert
 array_insert:
     // r0 = array, r1 = length, r2 = index, r3 = value
-    add r4, r0, r1, LSL #2  // pointer past last element
+    push {r4, r5, r6}        // Save callee-saved registers
+    add r4, r0, r1, LSL #2   // pointer past last element
     mov r5, r1               // r5 = current index = length
 
 shift_loop:
@@ -34,5 +35,6 @@ shift_loop:
 
 store_value:
     str r3, [r0, r2, LSL #2]
+    pop {r4, r5, r6}         // Restore registers
     bx lr
 
