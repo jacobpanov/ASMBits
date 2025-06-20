@@ -15,4 +15,16 @@ _start:
 
 .global array_inc
 array_inc:
-	
+    // r0 = array pointer, r1 = number of elements
+    cmp r1, #0
+    beq done
+
+loop:
+    ldr r2, [r0]      // Load element
+    add r2, r2, #1    // Increment
+    str r2, [r0], #4  // Store and move to next element
+    subs r1, r1, #1
+    bne loop
+
+done:
+    bx lr

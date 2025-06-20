@@ -13,3 +13,25 @@ _start:
     b _start        // End of testing code
 
 peak:
+    // r0 = length, r1 = pointer to array
+    push {r4, r5}      // Save callee-saved registers used
+    ldr r2, [r1], #4   // Load first element
+    mov r3, r2         // r3 holds minimum
+    mov r4, r2         // r4 holds maximum
+    subs r0, r0, #1    // Decrement length (one element already read)
+
+loop:
+    cmp r0, #0
+    beq done
+    ldr r5, [r1], #4   // Load next element
+    cmp r5, r4
+    movgt r4, r5       // Update max
+    cmp r5, r3
+    movlt r3, r5       // Update min
+    subs r0, r0, #1
+    b   loop
+
+done:
+    sub r0, r4, r3     // r0 = max - min
+    pop {r4, r5}       // Restore saved registers
+    bx  lr             // Return to caller
