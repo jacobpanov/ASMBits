@@ -1,7 +1,7 @@
 // Jacob Panov
 
 // Returns whether a tree's depth is at most a given bound.
-// Prototype: treedepth(root, depth)
+// Prototype: depth(root, d)
 // Node layout: [left, right]; null pointer = 0.
 
 .data
@@ -14,11 +14,11 @@ root_n: .word node_l, node_r
 _start:
     ldr r0, =root_n
     mov r1, #2
-    bl treedepth
+    bl depth
     1: b 1b
 
-.global treedepth
-treedepth:
+.global depth
+depth:
     push {r4-r7, lr}
     cmp r0, #0
     beq return_true
@@ -30,12 +30,12 @@ treedepth:
     mov r0, r4
     mov r6, r5
     mov r7, r1
-    bl treedepth
+    bl depth
     cmp r0, #0
     beq done_false
     mov r0, r6
     mov r1, r7
-    bl treedepth
+    bl depth
     cmp r0, #0
     beq done_false
     mov r0, #1

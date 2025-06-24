@@ -1,6 +1,7 @@
 // Jacob Panov
 
 // Returns the maximum value in an array.
+// The function is named `max`.
 
 .data
 Vals: .word 3,1,5,2,4
@@ -10,11 +11,11 @@ Vals: .word 3,1,5,2,4
 _start:
     ldr r0, =Vals
     mov r1, #5
-    bl max_args
+    bl max
     1: b 1b
 
-.global max_args
-max_args:
+.global max
+max:
     push {r4, lr}
     ldr r4, [r0], #4
     subs r1, r1, #1

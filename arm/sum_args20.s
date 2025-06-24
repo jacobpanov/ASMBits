@@ -1,33 +1,40 @@
 // Jacob Panov
 
-// Sums 20 integers stored in an array.
+// sum computes the sum of exactly 20 integer arguments.
+// Prototype: int sum(int n1, int n2, ..., int n20);
 
-.data
-Nums20:
-    .word 1,2,3,4,5,6,7,8,9,10
-    .word 11,12,13,14,15,16,17,18,19,20
-
-.text
 .global _start
 _start:
-    ldr r0, =Nums20
-    mov r1, #20
-    bl sum_args20
+    mov r0, #1
+    mov r1, #2
+    mov r2, #3
+    mov r3, #4
+    // push remaining 16 numbers onto the stack (values 5..20)
+    mov r4, #20
+    mov r5, #16
+1:
+    push {r4}
+    sub r4, r4, #1
+    subs r5, r5, #1
+    bne 1b
+    bl sum
+    add sp, sp, #64      // clean 16 params
     1: b 1b
 
-.global sum_args20
-sum_args20:
-    push {r4, lr}
-    mov r4, #0
-loop:
-    cmp r1, #0
-    beq done
-    ldr r2, [r0], #4
-    add r4, r4, r2
-    subs r1, r1, #1
-    bne loop
-
-done:
-    mov r0, r4
-    pop {r4, lr}
+.text
+.global sum
+sum:
+    push {r4-r7, lr}
+    // save register params to stack
+    push {r0-r3}
+    mov r4, sp           // pointer to all 20 params
+    mov r5, #20
+    mov r0, #0
+1:
+    ldr r6, [r4], #4
+    add r0, r0, r6
+    subs r5, r5, #1
+    bne 1b
+    add sp, sp, #16      // drop saved regs
+    pop {r4-r7, lr}
     bx lr

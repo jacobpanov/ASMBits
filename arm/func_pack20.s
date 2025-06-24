@@ -1,44 +1,47 @@
 // Jacob Panov
 
-// Demonstrates calling another function multiple times.
-// pack20 reads 20 groups of three bytes from Src and stores packed
-// words to Dst using pack3.
+// pack20 stores 20 bytes to memory starting at `array`.
+// The parameters are: pointer `array` in r0, bytes b1..b3 in
+// r1-r3, and bytes b4..b20 on the stack.
 
-.data
-Src:
-    .byte 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60
-Dst:
-    .space 20*4
-
-.text
 .global _start
 _start:
-    ldr r0, =Src
-    ldr r1, =Dst
+    // Example call
+    ldr r0, =Buffer
+    mov r1, #3
+    mov r2, #4
+    mov r3, #5
+    // Push remaining bytes 6..22 (example values)
+    mov r4, #22
+    mov r5, #17
+1:
+    push {r4}
+    sub r4, r4, #1
+    subs r5, r5, #1
+    bne 1b
     bl pack20
+    add sp, sp, #68      // clean 17 words
     1: b 1b
 
+.data
+Buffer: .space 20
+
+.text
 .global pack20
 pack20:
-    push {r4-r6, lr}
-    mov r4, r0        // src
-    mov r5, r1        // dst
-    mov r6, #20
-loop:
-    ldrb r0, [r4], #1
-    ldrb r1, [r4], #1
-    ldrb r2, [r4], #1
-    bl pack3
-    str r0, [r5], #4
-    subs r6, r6, #1
-    bne loop
-    pop {r4-r6, lr}
-    bx lr
-
-// pack3 as defined earlier
-.global pack3
-pack3:
-    lsl r0, r0, #16
-    orr r0, r0, r1, lsl #8
-    orr r0, r0, r2
+    push {lr}
+    mov r4, r0       // pointer to array
+    // store first three bytes
+    strb r1, [r4], #1
+    strb r2, [r4], #1
+    strb r3, [r4], #1
+    // pointer to remaining stack parameters
+    add r1, sp, #4
+    mov r2, #17
+2:
+    ldrb r3, [r1], #4
+    strb r3, [r4], #1
+    subs r2, r2, #1
+    bne 2b
+    pop {lr}
     bx lr
