@@ -1,20 +1,18 @@
 // Jacob Panov
 
-// pack3 packs three bytes into a 32-bit word as
-// (a << 16) | (b << 8) | c.
+// pack3 stores three integers into consecutive words in memory.
+// Parameters: r0=array pointer, r1=n1, r2=n2, r3=n3.
 
 .global _start
 _start:
-    mov r0, #0x12
-    mov r1, #0x34
-    mov r2, #0x56
+    ldr r0, =0x20000
+    mov r1, #3
+    mov r2, #4
+    mov r3, #5
     bl pack3
     1: b 1b
 
 .global pack3
 pack3:
-    // r0=a, r1=b, r2=c
-    lsl r0, r0, #16
-    orr r0, r0, r1, lsl #8
-    orr r0, r0, r2
+    stm r0, {r1, r2, r3}
     bx lr

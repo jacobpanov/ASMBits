@@ -5,11 +5,11 @@
 .global _start
 _start:
     mov r0, #10
-    bl fib2
+    bl fib
     1: b 1b
 
-.global fib2
-fib2:
+.global fib
+fib:
     push {r4-r6, lr}
     cmp r0, #1
     ble base

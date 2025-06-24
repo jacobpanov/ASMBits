@@ -12,21 +12,21 @@ root_node:  .word node_left, node_right
 .global _start
 _start:
     ldr r0, =root_node
-    bl treesize
+    bl size
     1: b 1b
 
-.global treesize
-treesize:
+.global size
+size:
     push {r4-r6, lr}
     cmp r0, #0
     beq zero
     ldr r4, [r0]
     ldr r5, [r0, #4]
     mov r0, r4
-    bl treesize
+    bl size
     mov r6, r0
     mov r0, r5
-    bl treesize
+    bl size
     add r0, r0, r6
     add r0, r0, #1
     pop {r4-r6, lr}
