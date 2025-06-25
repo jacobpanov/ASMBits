@@ -5,40 +5,34 @@
 
 .global _start
 _start:
-    mov r0, #3        // n
-    mov r1, #1
-    mov r2, #2
-    mov r3, #3
-    bl sum
-    1: b 1b
+	ldr sp, =0x40000000	// Initial sp
+	mov r0, #2
+	mov r1, #1
+	mov r2, #2
+	
+	bl sum
+	1: b 1b  // done
 
-.text
 .global sum
 sum:
-    push {r4-r7, lr}
-    mov r4, #0       // accumulator
-    mov r5, r0       // count remaining
-    // handle first three arguments in r1-r3
-    cmp r5, #0
-    beq done
-    add r4, r4, r1
-    subs r5, r5, #1
-    beq done
-    add r4, r4, r2
-    subs r5, r5, #1
-    beq done
-    add r4, r4, r3
-    subs r5, r5, #1
-    beq done
-    // remaining arguments on stack after pushes (5 regs *4 =20)
-    add r6, sp, #20
-1:
-    ldr r7, [r6], #4
-    add r4, r4, r7
-    subs r5, r5, #1
-    bne 1b
+    push {r4, r5, r6, r7}      // Save callee-saved registers
+    mov r4, r0                 // r4 = n (number of arguments to sum)
+    mov r5, #0                 // r5 = sum
+    mov r6, #0                 // r6 = loop counter
+    add r7, sp, #4             // r7 = pointer to first vararg (skip saved lr)
 
-done:
-    mov r0, r4
-    pop {r4-r7, lr}
+sum_loop:
+    cmp r6, r4                 // Have we summed n numbers?
+    beq sum_done
+    ldr r0, [r7, r6, lsl #2]   // Load next argument
+    add r5, r5, r0             // Add to sum
+    add r6, r6, #1             // Increment counter
+    b sum_loop
+
+sum_done:
+    mov r0, r5                 // Return value in r0
+    pop {r4, r5, r6, r7}       // Restore callee-saved registers
     bx lr
+
+	
+	
