@@ -15,23 +15,27 @@ _start:
 
 .global sum
 sum:
-    push {r4, r5, r6, r7}      // Save callee-saved registers
-    mov r4, r0                 // r4 = n (number of arguments to sum)
-    mov r5, #0                 // r5 = sum
-    mov r6, #0                 // r6 = loop counter
-    add r7, sp, #4             // r7 = pointer to first vararg (skip saved lr)
+    // Push the four register arguments so that all parameters are on the stack
+    push {r0, r1, r2, r3}
+    // Save callee-saved registers used by the routine
+    push {r4, r5, r6, r7}
+
+    mov r4, r0                 // r4 = n (number of integers)
+    add r5, sp, #20            // r5 -> first integer argument (saved r1)
+    mov r6, #0                 // r6 = accumulated sum
 
 sum_loop:
-    cmp r6, r4                 // Have we summed n numbers?
+    cmp r4, #0                 // Have we processed all n numbers?
     beq sum_done
-    ldr r0, [r7, r6, lsl #2]   // Load next argument
-    add r5, r5, r0             // Add to sum
-    add r6, r6, #1             // Increment counter
-    b sum_loop
+    ldr r7, [r5], #4           // Load next argument and advance pointer
+    add r6, r6, r7
+    subs r4, r4, #1
+    bne sum_loop
 
 sum_done:
-    mov r0, r5                 // Return value in r0
-    pop {r4, r5, r6, r7}       // Restore callee-saved registers
+    mov r0, r6                 // Return value
+    pop {r4, r5, r6, r7}       // Restore registers
+    add sp, sp, #16            // Remove saved arguments
     bx lr
 
 	

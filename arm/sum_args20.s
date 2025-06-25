@@ -26,26 +26,23 @@ initloop:
 	1: b 1b  // done
 
 sum:
-    push {r4, r5, r6, r7}      // Save callee-saved registers
-    sub sp, sp, #16            // Make space for 4 words
-    str r0, [sp, #0]           // Store r0 at lowest address
-    str r1, [sp, #4]           // Store r1
-    str r2, [sp, #8]           // Store r2
-    str r3, [sp, #12]          // Store r3
+    // Save callee-saved registers and push the four arguments so all
+    // 20 parameters are consecutive on the stack.
+    push {r0, r1, r2, r3}
+    push {r4, r5, r6, r7}
 
-    mov r4, sp                 // r4 = pointer to n1 (lowest address)
-    mov r5, #0                 // r5 = sum
-    mov r6, #0                 // r6 = loop counter
+    add r4, sp, #16            // r4 -> first argument (saved r0)
+    mov r5, #20                // Number of parameters
+    mov r6, #0                 // Accumulated sum
 
 sum_loop:
-    ldr r7, [r4, r6, lsl #2]   // Load argument (each is 4 bytes)
-    add r5, r5, r7             // Add to sum
-    add r6, r6, #1             // Increment counter
-    cmp r6, #20                // 20 arguments total
-    blt sum_loop
+    ldr r7, [r4], #4           // Load next argument and advance pointer
+    add r6, r6, r7
+    subs r5, r5, #1
+    bne sum_loop
 
-    mov r0, r5                 // Return value in r0
-    add sp, sp, #16            // Remove the 4 pushed arguments
-    pop {r4, r5, r6, r7}       // Restore callee-saved registers
+    mov r0, r6                 // Return value
+    pop {r4, r5, r6, r7}       // Restore saved registers
+    add sp, sp, #16            // Drop saved arguments
     bx lr
 
