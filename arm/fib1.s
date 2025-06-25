@@ -4,7 +4,7 @@
 
 .global _start
 _start:
-    mov r0, #10
+    mov r0, #4
     bl fib
     1: b 1b
 
@@ -12,7 +12,7 @@ _start:
 fib:
     push {r4-r5, lr}
     cmp r0, #1
-    ble base
+    bls base
     mov r4, r0          // save n
     sub r0, r0, #1
     bl fib              // fib(n-1)
@@ -23,5 +23,6 @@ fib:
     pop {r4-r5, lr}
     bx lr
 base:
+    mov r0, #1
     pop {r4-r5, lr}
     bx lr

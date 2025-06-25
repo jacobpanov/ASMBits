@@ -6,22 +6,23 @@
 
 .global _start
 _start:
-    // Example call
-    ldr r0, =Buffer
+    ldr sp, =0x40000000 // Initial SP
+    ldr r0, =0x20000
+    mov r1, #22
+    mov r2, #17
+1:
+    push {r1}
+    sub r1, #1
+    subs r2, #1
+    bne 1b
+        
     mov r1, #3
     mov r2, #4
     mov r3, #5
-    // Push remaining bytes 6..22 (example values)
-    mov r4, #22
-    mov r5, #17
-1:
-    push {r4}
-    sub r4, r4, #1
-    subs r5, r5, #1
-    bne 1b
+    
     bl pack20
-    add sp, sp, #68      // clean 17 words
-    1: b 1b
+    add sp, #68   // Caller cleans up the stack: Remove 17 parameters.
+    1: b 1b  // done
 
 .data
 Buffer: .space 20
@@ -29,19 +30,16 @@ Buffer: .space 20
 .text
 .global pack20
 pack20:
-    push {lr}
-    mov r4, r0       // pointer to array
-    // store first three bytes
-    strb r1, [r4], #1
-    strb r2, [r4], #1
-    strb r3, [r4], #1
-    // pointer to remaining stack parameters
-    add r1, sp, #4
-    mov r2, #17
-2:
+    // r0 -> array, r1-r3 contain the first three bytes
+    strb r1, [r0], #1
+    strb r2, [r0], #1
+    strb r3, [r0], #1
+
+    mov r1, sp        // r1 -> b4 on the stack
+    mov r2, #17       // Remaining bytes to store
+1:
     ldrb r3, [r1], #4
-    strb r3, [r4], #1
+    strb r3, [r0], #1
     subs r2, r2, #1
-    bne 2b
-    pop {lr}
+    bne 1b
     bx lr
