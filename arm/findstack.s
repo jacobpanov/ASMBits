@@ -11,4 +11,6 @@ _start:
 
 // Your function starts here:
 where:
+    mov r0, sp     // Load stack pointer at function entry
+    bx lr          // Return to caller
 

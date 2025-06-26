@@ -24,4 +24,19 @@ _start:
 
 // Your function starts here:
 loadexec:
+    push {r4, lr}        // Save callee-saved register and link
+    mov r4, r0           // Keep destination address
 
+copy_loop:
+    cmp r2, #0           // Any bytes left to copy?
+    beq done_copy
+    ldrb r12, [r1], #1   // Load byte from source
+    strb r12, [r0], #1   // Store byte to destination
+    subs r2, r2, #1
+    b copy_loop
+
+done_copy:
+    mov r0, r3           // Parameter for copied function
+    blx r4               // Call copied code
+    pop {r4, lr}         // Restore registers
+    bx lr                // Return result in r0

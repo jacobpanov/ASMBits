@@ -10,4 +10,6 @@ _start:
 
 // Your function starts here:
 where:
+    sub r0, lr, #4  // Address of the call instruction
+    bx lr           // Return to caller
 

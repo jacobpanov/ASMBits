@@ -13,4 +13,7 @@ _start:
 
 // Your function starts here:
 get_opcode:
+    ldr r1, =MyFunc   // Load address of MyFunc
+    ldr r0, [r1]      // Load first instruction word
+    bx lr             // Return to caller
 

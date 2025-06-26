@@ -13,4 +13,6 @@ _start:
 
 // Your function starts here:
 where:
+    ldr r0, =Waldo  // Address of label Waldo
+    bx lr           // Return to caller
 

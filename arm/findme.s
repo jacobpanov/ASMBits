@@ -8,6 +8,8 @@ _start:
     bl where
     1: b 1b  // done
 
-# Your function starts here:
+// Your function starts here:
 where:
+    adr r0, where  // Address of this function
+    bx lr          // Return to caller
 
