@@ -23,3 +23,27 @@ _start:
 
 
 cachehit:
+        // r0 = B, r1 = S, r2 = cachetags, r3 = addr
+
+        // Compute set index: (addr >> B) & ((1 << S) - 1)
+        mov     r12, r3
+        lsr     r12, r12, r0
+        mov     r4, #1
+        lsl     r4, r4, r1
+        sub     r4, r4, #1
+        and     r12, r12, r4      // r12 = set index
+
+        // Compute tag: addr >> (B + S)
+        add     r4, r0, r1
+        mov     r5, r3
+        lsr     r5, r5, r4        // r5 = tag
+
+        // Load tag from cachetags[set index]
+        lsl     r12, r12, #2      // offset = set index * 4
+        ldr     r6, [r2, r12]     // r6 = cache tag
+
+        // Compare tags
+        cmp     r5, r6
+        moveq   r0, #1
+        movne   r0, #0
+        bx      lr
