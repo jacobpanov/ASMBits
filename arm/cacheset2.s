@@ -14,24 +14,20 @@ _start:
 cacheset:
         // r0 = S, r1 = B, r2 = addr1, r3 = addr2
 
-        // Compute set mask: (1 << S) - 1
-        push {r4-r6, lr}
-        mov r4, #1
-        lsl r4, r4, r0        // r4 = 1 << S
-        sub r4, r4, #1        // r4 = (1 << S) - 1
+        // Compute set index for addr1 and addr2, compare
+        mov     r12, r2
+        lsr     r12, r12, r1      // r12 = addr1 >> B
+        mov     r4, r3
+        lsr     r4, r4, r1        // r4 = addr2 >> B
 
-        // Compute set index for addr1: (addr1 >> B) & mask
-        mov r5, r2
-        lsr r5, r5, r1
-        and r5, r5, r4
+        mov     r5, #1
+        lsl     r5, r5, r0        // r5 = 1 << S
+        sub     r5, r5, #1        // r5 = (1 << S) - 1
 
-        // Compute set index for addr2: (addr2 >> B) & mask
-        mov r6, r3
-        lsr r6, r6, r1
-        and r6, r6, r4
+        and     r12, r12, r5      // set index addr1
+        and     r4, r4, r5        // set index addr2
 
-        cmp r5, r6
-        moveq r0, #1
-        movne r0, #0
-        pop {r4-r6, lr}
-        bx lr
+        cmp     r12, r4
+        moveq   r0, #1
+        movne   r0, #0
+        bx      lr
