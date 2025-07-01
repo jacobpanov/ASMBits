@@ -15,18 +15,18 @@ _start:
 cachetag:
         // r0 = C (bytes), r1 = W, r2 = addr1, r3 = addr2
 
-        // Compute log2(C)
-        mov     r12, r0
-        clz     r0, r12           // r0 = count leading zeros
-        rsb     r0, r0, #32       // r0 = log2(C)
+        sub     r0, #1              // r0 = C-1
+        clz     r0, r0              // r0 = clz(C-1)
+        add     r0, r1              // r0 = clz(C-1) + W
+        mov     r1, #32
+        sub     r1, r0              // r1 = 32 - (clz(C-1) + W)
 
-        // Compute shift = log2(C) - W
-        sub     r0, r0, r1
+        eor     r2, r2, r3          // r2 = addr1 ^ addr2
+        lsrs    r2, r2, r1          // shift out offset/set bits
 
-        // Compute tag for addr1
-        mov     r1, r2
-        lsr     r1, r1, r0
-
+        moveq   r0, #1
+        movne   r0, #0
+        bx      lr
         // Compute tag for addr2
         mov     r2, r3
         lsr     r2, r2, r0
