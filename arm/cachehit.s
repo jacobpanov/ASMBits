@@ -24,25 +24,25 @@ _start:
 
 cachehit:
         // r0 = B, r1 = S, r2 = cachetags, r3 = addr
+        push    {r4-r7}
 
-        // Compute set index: (addr >> B) & ((1 << S) - 1)
-        mov     r12, r3
-        lsr     r12, r12, r0
-        mov     r4, #1
-        lsl     r4, r4, r1
-        sub     r4, r4, #1
-        and     r12, r12, r4      // r12 = set index
+        lsr     r4, r3, r0           // r4 = addr >> B
+        mov     r5, #32
+        sub     r5, r1               // r5 = 32 - S
+        lsl     r4, r4, r5
+        lsr     r4, r4, r5           // r4 = set index
+        lsl     r4, r4, #2           // r4 = set index * 4
 
-        // Compute tag: addr >> (B + S)
-        add     r4, r0, r1
-        mov     r5, r3
-        lsr     r5, r5, r4        // r5 = tag
+        ldr     r5, [r2, r4]         // r5 = tag from cachetags[set index]
 
-        // Load tag from cachetags[set index]
-        lsl     r12, r12, #2      // offset = set index * 4
-        ldr     r6, [r2, r12]     // r6 = cache tag
+        eor     r5, r3               // r5 = tag ^ addr
+        lsr     r5, r5, r0           // remove block offset bits
+        lsrs    r5, r5, r1           // remove set index bits
 
-        // Compare tags
+        moveq   r0, #1
+        movne   r0, #0
+        pop     {r4-r7}
+        bx      lr
         cmp     r5, r6
         moveq   r0, #1
         movne   r0, #0
