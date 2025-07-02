@@ -10,3 +10,7 @@ _start:
 1:      b 1b    // Done
 
 addrlines:
+    sub r2, r0, #1       // Depth - 1
+    clz r2, r2           // Count leading zeros
+    rsb r0, r2, #32      // 32 - leading zeros
+    bx lr
