@@ -10,3 +10,7 @@ _start:
 1:      b 1b    // Done
 
 memsize:
+    mov r2, #1           // 1 << address lines
+    lsl r2, r2, r0
+    mul r0, r2, r1       // capacity in bits
+    bx lr
