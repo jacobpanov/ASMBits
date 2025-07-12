@@ -14,4 +14,7 @@ _start:
 
 .global load
 load:
-    # Implement load here.
+    movhi r2, 0x34           # r2 = 0x34_0000
+    ori   r2, r2, 0x5678     # r2 = 0x34_5678
+    ldw   r2, 0(r2)          # load word from [0x345678] into r2
+    ret
