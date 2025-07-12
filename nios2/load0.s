@@ -8,4 +8,5 @@ _start:
     1: br 1b    # Done
 
 load:
-    # Implement load from label here.
+    ldw r2, Data(r0)   # Load word at Data into r2 (return register)
+    ret                # Return to caller
