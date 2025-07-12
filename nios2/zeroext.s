@@ -9,4 +9,5 @@ _start:
 
 # A function to zero extend. Only this part will be tested.
 zeroext:
-    # Implement zero extension here.
+    andi    r2, r4, 0xff   # Mask all but the lowest 8 bits, result in r2
+    ret
