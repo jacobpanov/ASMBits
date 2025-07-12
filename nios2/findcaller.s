@@ -9,4 +9,5 @@ _start:
 
 # Your function starts here:
 where:
-    # Implement caller finding here.
+    subi r2, r31, 4   # r2 = address of calling instruction
+    ret
