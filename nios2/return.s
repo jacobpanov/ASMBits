@@ -7,5 +7,4 @@ _start:
     1: br 1b     # Infinite loop to stop program after testing
 
 func:
-    # This is where your code starts running when judging.
     ret
