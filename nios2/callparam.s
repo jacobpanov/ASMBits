@@ -15,4 +15,9 @@ not_secret:  # For debugging, call this instead of secret.
 
 .global call1234
 call1234:
-    # Implement tail call here.
+    movi r4, 1      # First argument
+    movi r5, 2      # Second argument
+    movi r6, 3      # Third argument
+    movi r7, 4      # Fourth argument
+    movia r8, secret # Address of secret
+    jmp r8          # Tail call
