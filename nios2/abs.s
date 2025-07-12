@@ -9,4 +9,8 @@ _start:
 
 .global abs
 abs:
-    # Implement absolute value here.
+    mov r2, r4           # Copy input to r2
+    bge r4, zero, endabs # If r4 >= 0, skip negation
+    sub r2, zero, r4     # r2 = -r4
+endabs:
+    ret
